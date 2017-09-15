@@ -18,12 +18,14 @@ public class RequestLogic {
     private String id;
     private BaseRequest request;
     private KoalaTaskListener listener;
+    private KoalaInterrupt interrupt;
     private int code = 0;
 
     private RequestLogic(Builder builder) {
         id = builder.id;
         request = builder.request;
         listener = builder.listener;
+        interrupt = builder.interrupt;
 
     }
 
@@ -32,6 +34,15 @@ public class RequestLogic {
         ExecuteHelper.getLogicHelper().execute(new LogicTask(id) {
             @Override
             protected void execute() {
+                if(interrupt != null) {
+                    if(interrupt.OnInterrupt()) {
+                        if (listener != null) {
+                            code = NetworkConstants.REQUEST_INTERRUPT;
+                            listener.onResponseResult(null, request, code);
+                        }
+                        return;
+                    }
+                }
                 Class<T> cls = KoalaHttpUtils.parserClass(listener);
                 T object = generalRequestSync(cls, request);
                 if (listener != null) {
@@ -39,6 +50,26 @@ public class RequestLogic {
                 }
             }
         });
+    }
+
+    public void get() {
+        request.method = KoalaRequestType.GET;
+        execute();
+    }
+
+    public void post() {
+        request.method = KoalaRequestType.POST;
+        execute();
+    }
+
+    public void patch() {
+        request.method = KoalaRequestType.PATCH;
+        execute();
+    }
+
+    public void delete() {
+        request.method = KoalaRequestType.DELETE;
+        execute();
     }
 
     public <T> T executeSync(Class<T> cls) {
@@ -60,18 +91,17 @@ public class RequestLogic {
                 if (response.isSuccessful()) {
                     if (cls != null && !TextUtils.isEmpty(responseString)) {
                         result = KoalaGson.fromJson(cls, responseString);
-                        if (result == null) {
-                            code = NetworkConstants.PARSER_ERROR;
+                        if (result != null) {
+                            return result;
                         }
+                        code = NetworkConstants.PARSER_ERROR;
                     }
                 }
             } else {
                 code = NetworkConstants.NO_RESPONSE;
-                return null;
             }
         } catch (IOException e) {
             code = NetworkConstants.NETWORK_ERROR;
-            return null;
         }
         return null;
     }
@@ -80,6 +110,7 @@ public class RequestLogic {
         private String id;
         private BaseRequest request;
         private KoalaTaskListener listener;
+        private KoalaInterrupt interrupt;
 
         public Builder() {
 
@@ -97,6 +128,11 @@ public class RequestLogic {
 
         public Builder setListener(@NonNull KoalaTaskListener l) {
             listener = l;
+            return this;
+        }
+
+        public Builder setInterrupt(KoalaInterrupt i) {
+            interrupt = i;
             return this;
         }
 

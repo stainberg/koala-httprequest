@@ -12,7 +12,15 @@ public class RequestFactory {
         return new CacheRequest(url, type);
     }
 
+    public static BaseRequest NewRequest(String url) {
+        return new CacheRequest(url);
+    }
+
     private static class CacheRequest extends BaseRequest {
+
+        CacheRequest(String url) {
+            super(url);
+        }
 
         CacheRequest(String url, KoalaRequestType method) {
             super(url, method);

@@ -19,6 +19,10 @@ public abstract class BaseRequest implements Serializable {
     public String url;
     public KoalaRequestType method;
 
+    public BaseRequest(String url) {
+        this(url, KoalaRequestType.GET);
+    }
+
     public BaseRequest(String url, KoalaRequestType method) {
         this.url = url;
         this.method = method;
@@ -30,6 +34,9 @@ public abstract class BaseRequest implements Serializable {
         }
         if(RequestConfig.getConfig().params.size() > 0) {
             params.putAll(RequestConfig.getConfig().params);
+        }
+        if(!this.url.startsWith("http")) {
+            this.url = "http://" + this.url;
         }
     }
 
