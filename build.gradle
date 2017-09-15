@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 25
@@ -10,9 +9,6 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     lintOptions {
         abortOnError false
@@ -28,13 +24,12 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support'
+        exclude group: 'com.google.code.gson'
     })
-    testCompile 'junit:junit:4.12'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.squareup.okio:okio:1.9.0'
     compile 'com.google.code.gson:gson:2.8.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.android.support:support-v4:25.3.1'
 }
 repositories {
@@ -45,8 +40,8 @@ apply plugin: 'com.novoda.bintray-release'
 publish {
     userOrg = 'donaldyen'
     groupId = 'com.stainberg.koala'
-    artifactId = 'krequest'
-    publishVersion = '0.0.1'
+    artifactId = 'http-request'
+    publishVersion = '0.0.7'
     desc = 'Wow'
-    website = 'https://github.com/stainberg/koala-restload'
+    website = 'https://github.com/stainberg/koala-httprequest'
 }

@@ -49,10 +49,13 @@ public class RequestLogic {
         T result;
         String responseString;
         try {
+            Logger.getLogger().Println("Request id = " + id, KoalaGson.toJson(request));
             Response response = KoalaHttpLoader.getInstance().syncTask(request);
+            Logger.getLogger().Println("Response id = " + id, KoalaGson.toJson(response));
             if (response != null) {
                 code = response.code();
                 responseString = response.body().string();
+                Logger.getLogger().Println("Response String id = " + id, responseString);
                 response.close();
                 if (response.isSuccessful()) {
                     if (cls != null && !TextUtils.isEmpty(responseString)) {
@@ -99,7 +102,7 @@ public class RequestLogic {
 
         public RequestLogic build() {
             if(TextUtils.isEmpty(id)) {
-                id = SecurityMD5.ToMD5(request.getUrl());
+                id = SecurityMD5.ToMD5(request.url);
             }
             return new RequestLogic(this);
         }

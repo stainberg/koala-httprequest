@@ -10,19 +10,13 @@ import okhttp3.Response;
  */
 final class KoalaHttpTask {
 
-    private Object tag;
     private Request request;
 
     KoalaHttpTask(final Request request) {
-        tag = request.tag();
         this.request = request;
     }
 
     Response sync() throws IOException {
         return BaseHttpClient.getHttpObject().getOkHttpClient().newCall(request).execute();
-    }
-
-    public Object getTag() {
-        return tag;
     }
 }
