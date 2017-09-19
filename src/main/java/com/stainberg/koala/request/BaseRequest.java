@@ -55,6 +55,7 @@ public abstract class BaseRequest implements Serializable {
         attachment.key = k;
         attachment.filename = filename;
         attachment.body = body;
+        extras.add(attachment);
         return this;
     }
 

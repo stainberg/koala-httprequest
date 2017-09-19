@@ -11,5 +11,6 @@ public class NetworkConstants {
     public static final int PARSER_ERROR = -2;
     public static final int NO_RESPONSE = -3;
     public static final int NETWORK_ERROR = -4;
+    public static final int BUSINESS_ERROR = -5;
 
 }

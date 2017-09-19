@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion 17
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -22,15 +22,10 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support'
-        exclude group: 'com.google.code.gson'
-    })
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.squareup.okio:okio:1.9.0'
+    compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    compile 'com.squareup.okio:okio:1.13.0'
     compile 'com.google.code.gson:gson:2.8.1'
-    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.0.2'
 }
 repositories {
     mavenCentral()
@@ -41,7 +36,7 @@ publish {
     userOrg = 'donaldyen'
     groupId = 'com.stainberg.koala'
     artifactId = 'http-request'
-    publishVersion = '0.0.9'
-    desc = 'Wow'
+    publishVersion = '0.1.8'
+    desc = 'with okhttp:3.9.0,okio:1.13.0'
     website = 'https://github.com/stainberg/koala-httprequest'
 }

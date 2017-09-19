@@ -80,7 +80,7 @@ final class KoalaHttpLoader {
                     bodyBuilder.setType(MultipartBody.FORM);
                     for (Map.Entry<String, String> maEntry : params.entrySet()) {
                         if (maEntry.getKey() != null && maEntry.getValue() != null) {
-                            bodyBuilder.addPart(MultipartBody.Part.createFormData(maEntry.getKey(), maEntry.getValue()));
+                            bodyBuilder.addFormDataPart(maEntry.getKey(), maEntry.getValue());
                         }
                     }
                     for (BaseRequest.Attachment request : extras) {
@@ -108,7 +108,7 @@ final class KoalaHttpLoader {
                     bodyBuilder.setType(MultipartBody.FORM);
                     for (Map.Entry<String, String> maEntry : params.entrySet()) {
                         if (maEntry.getKey() != null && maEntry.getValue() != null) {
-                            bodyBuilder.addPart(MultipartBody.Part.createFormData(maEntry.getKey(), maEntry.getValue()));
+                            bodyBuilder.addFormDataPart(maEntry.getKey(), maEntry.getValue());
                         }
                     }
                     for (BaseRequest.Attachment request : extras) {
@@ -136,7 +136,7 @@ final class KoalaHttpLoader {
                     bodyBuilder.setType(MultipartBody.FORM);
                     for (Map.Entry<String, String> maEntry : params.entrySet()) {
                         if (maEntry.getKey() != null && maEntry.getValue() != null) {
-                            bodyBuilder.addPart(MultipartBody.Part.createFormData(maEntry.getKey(), maEntry.getValue()));
+                            bodyBuilder.addFormDataPart(maEntry.getKey(), maEntry.getValue());
                         }
                     }
                     for (BaseRequest.Attachment request : extras) {

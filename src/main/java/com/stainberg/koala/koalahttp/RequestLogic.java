@@ -5,8 +5,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.stainberg.koala.request.BaseRequest;
-
-import java.io.IOException;
+import com.stainberg.koala.request.RequestConfig;
 
 import okhttp3.Response;
 
@@ -20,6 +19,7 @@ public class RequestLogic {
     private KoalaTaskListener listener;
     private KoalaInterrupt interrupt;
     private int code = 0;
+    private String resultString = "";
 
     private RequestLogic(Builder builder) {
         id = builder.id;
@@ -38,15 +38,15 @@ public class RequestLogic {
                     if(interrupt.OnInterrupt()) {
                         if (listener != null) {
                             code = NetworkConstants.REQUEST_INTERRUPT;
-                            listener.onResponseResult(null, request, code);
+                            listener.onResponseResult(null, request, code, resultString);
                         }
                         return;
                     }
                 }
                 Class<T> cls = KoalaHttpUtils.parserClass(listener);
-                T object = generalRequestSync(cls, request);
+                T object = generalRequestSync(cls);
                 if (listener != null) {
-                    listener.onResponseResult(object, request, code);
+                    listener.onResponseResult(object, request, code, resultString);
                 }
             }
         });
@@ -73,10 +73,10 @@ public class RequestLogic {
     }
 
     public <T> T executeSync(Class<T> cls) {
-        return generalRequestSync(cls, request);
+        return generalRequestSync(cls);
     }
 
-    private <T> T generalRequestSync(Class<T> cls, BaseRequest request) {
+    private <T> T generalRequestSync(Class<T> cls) {
         T result;
         String responseString;
         try {
@@ -86,6 +86,7 @@ public class RequestLogic {
             if (response != null) {
                 code = response.code();
                 responseString = response.body().string();
+                resultString = responseString;
                 Logger.getLogger().Println("Response String id = " + id, responseString);
                 response.close();
                 if (response.isSuccessful()) {
@@ -96,11 +97,13 @@ public class RequestLogic {
                         }
                         code = NetworkConstants.PARSER_ERROR;
                     }
+                } else {
+                    RequestConfig.NotifyListener(code, responseString, request);
                 }
             } else {
                 code = NetworkConstants.NO_RESPONSE;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             code = NetworkConstants.NETWORK_ERROR;
         }
         return null;

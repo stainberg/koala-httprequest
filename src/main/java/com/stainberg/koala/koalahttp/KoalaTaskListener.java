@@ -1,6 +1,7 @@
 package com.stainberg.koala.koalahttp;
 
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
@@ -24,7 +25,7 @@ public abstract class KoalaTaskListener<T, K extends BaseRequest> {
         this.mode = mode;
     }
 
-    protected abstract void onResponse(T result, K request, int code);
+    protected abstract void onResponse(T result, K request, int code, String resultString);
 
     protected void onFinish() {
 
@@ -46,17 +47,26 @@ public abstract class KoalaTaskListener<T, K extends BaseRequest> {
         return object;
     }
 
-    void onResponseResult(final T result, final K request, final int code) {
+    void onResponseResult(final T result, final K request, final int code, final String resultString) {
         switch (mode) {
             case MAIN:
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Object cls = KoalaTaskListener.this;
                         try {
-                            Object outer = getOuterObject(cls);
+                            Object outer = getOuterObject(KoalaTaskListener.this);
                             if(outer instanceof Fragment) {
-                                if(((Fragment)outer).getActivity() == null) {
+                                if(!((Fragment) outer).isAdded()) {
+                                    return;
+                                }
+                            }
+                            if(outer instanceof android.app.Fragment) {
+                                if(!((android.app.Fragment) outer).isAdded()) {
+                                    return;
+                                }
+                            }
+                            if(outer instanceof Activity) {
+                                if(((Activity) outer).isDestroyed()) {
                                     return;
                                 }
                             }
@@ -64,7 +74,7 @@ public abstract class KoalaTaskListener<T, K extends BaseRequest> {
                             e.printStackTrace();
                         }
                         KoalaTaskListener.this.onFinish();
-                        KoalaTaskListener.this.onResponse(result, request, code);
+                        KoalaTaskListener.this.onResponse(result, request, code, resultString);
                     }
                 });
                 break;
@@ -72,14 +82,34 @@ public abstract class KoalaTaskListener<T, K extends BaseRequest> {
                 ExecuteHelper.getLogicHelper().executeOnBackground(new Runnable() {
                     @Override
                     public void run() {
+                        try {
+                            Object outer = getOuterObject(KoalaTaskListener.this);
+                            if(outer instanceof Fragment) {
+                                if(!((Fragment) outer).isAdded()) {
+                                    return;
+                                }
+                            }
+                            if(outer instanceof android.app.Fragment) {
+                                if(!((android.app.Fragment) outer).isAdded()) {
+                                    return;
+                                }
+                            }
+                            if(outer instanceof Activity) {
+                                if(((Activity) outer).isDestroyed()) {
+                                    return;
+                                }
+                            }
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
                         KoalaTaskListener.this.onFinish();
-                        KoalaTaskListener.this.onResponse(result, request, code);
+                        KoalaTaskListener.this.onResponse(result, request, code, resultString);
                     }
                 });
                 break;
             case SYNC:
                 KoalaTaskListener.this.onFinish();
-                KoalaTaskListener.this.onResponse(result, request, code);
+                KoalaTaskListener.this.onResponse(result, request, code, resultString);
                 break;
         }
     }
