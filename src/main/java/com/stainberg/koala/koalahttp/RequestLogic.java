@@ -175,15 +175,19 @@ public class RequestLogic {
                 builder.append("-d");
                 builder.append(wspace);
                 builder.append("'");
-                int index = 1;
-                for (Map.Entry<String, String> entry : request.params.entrySet()) {
-                    builder.append(entry.getKey());
-                    builder.append("=");
-                    builder.append(entry.getValue());
-                    if (index < request.params.size()) {
-                        builder.append("&");
+                if(request.obj != null) {
+                    builder.append(KoalaGson.toJson(request.obj));
+                } else {
+                    int index = 1;
+                    for (Map.Entry<String, String> entry : request.params.entrySet()) {
+                        builder.append(entry.getKey());
+                        builder.append("=");
+                        builder.append(entry.getValue());
+                        if (index < request.params.size()) {
+                            builder.append("&");
+                        }
+                        index++;
                     }
-                    index++;
                 }
                 builder.append("'");
                 builder.append(wspace);
