@@ -13,6 +13,7 @@ import okhttp3.RequestBody;
 
 public abstract class BaseRequest implements Serializable {
 
+    public Object obj;
     public Map<String, String> params;
     public Map<String, String> headers;
     public List<Attachment> extras;
@@ -47,6 +48,11 @@ public abstract class BaseRequest implements Serializable {
 
     public BaseRequest AddHead(String k, String v) {
         headers.put(k, v);
+        return this;
+    }
+
+    public BaseRequest AddObject(Object o) {
+        obj = o;
         return this;
     }
 

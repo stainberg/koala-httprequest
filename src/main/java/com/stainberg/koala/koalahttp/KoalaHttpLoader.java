@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -63,88 +64,100 @@ final class KoalaHttpLoader {
                 url += ("?" + KoalaHttpUtils.getNameValuePair(params));
             }
         } else if (requestEntity.method == KoalaRequestType.POST) {
-            if(params.size() == 0) {
-                builder.post(new FormBody.Builder().build());
+            if(requestEntity.obj != null) {
+                builder.post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), KoalaGson.toJson(requestEntity.obj)));
             } else {
-                RequestBody body;
-                if(extras.size() == 0) {
-                    FormBody.Builder bodyBuilder = new FormBody.Builder();
-                    for (Map.Entry<String, String> maEntry : params.entrySet()) {
-                        if (maEntry.getKey() != null && maEntry.getValue() != null) {
-                            bodyBuilder.add(maEntry.getKey(), maEntry.getValue());
-                        }
-                    }
-                    body = bodyBuilder.build();
+                if (params.size() == 0) {
+                    builder.post(new FormBody.Builder().build());
                 } else {
-                    MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
-                    bodyBuilder.setType(MultipartBody.FORM);
-                    for (Map.Entry<String, String> maEntry : params.entrySet()) {
-                        if (maEntry.getKey() != null && maEntry.getValue() != null) {
-                            bodyBuilder.addFormDataPart(maEntry.getKey(), maEntry.getValue());
+                    RequestBody body;
+                    if (extras.size() == 0) {
+                        FormBody.Builder bodyBuilder = new FormBody.Builder();
+                        for (Map.Entry<String, String> maEntry : params.entrySet()) {
+                            if (maEntry.getKey() != null && maEntry.getValue() != null) {
+                                bodyBuilder.add(maEntry.getKey(), maEntry.getValue());
+                            }
                         }
+                        body = bodyBuilder.build();
+                    } else {
+                        MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+                        bodyBuilder.setType(MultipartBody.FORM);
+                        for (Map.Entry<String, String> maEntry : params.entrySet()) {
+                            if (maEntry.getKey() != null && maEntry.getValue() != null) {
+                                bodyBuilder.addFormDataPart(maEntry.getKey(), maEntry.getValue());
+                            }
+                        }
+                        for (BaseRequest.Attachment request : extras) {
+                            bodyBuilder.addFormDataPart(request.key, request.filename, request.body);
+                        }
+                        body = bodyBuilder.build();
                     }
-                    for (BaseRequest.Attachment request : extras) {
-                        bodyBuilder.addFormDataPart(request.key, request.filename, request.body);
-                    }
-                    body = bodyBuilder.build();
+                    builder.post(body);
                 }
-                builder.post(body);
             }
         } else if (requestEntity.method == KoalaRequestType.PATCH) {
-            if(params.size() == 0) {
-                builder.patch(new FormBody.Builder().build());
+            if(requestEntity.obj != null) {
+                builder.patch(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), KoalaGson.toJson(requestEntity.obj)));
             } else {
-                RequestBody body;
-                if(extras.size() == 0) {
-                    FormBody.Builder bodyBuilder = new FormBody.Builder();
-                    for (Map.Entry<String, String> maEntry : params.entrySet()) {
-                        if (maEntry.getKey() != null && maEntry.getValue() != null) {
-                            bodyBuilder.add(maEntry.getKey(), maEntry.getValue());
-                        }
-                    }
-                    body = bodyBuilder.build();
+                if (params.size() == 0) {
+                    builder.patch(new FormBody.Builder().build());
                 } else {
-                    MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
-                    bodyBuilder.setType(MultipartBody.FORM);
-                    for (Map.Entry<String, String> maEntry : params.entrySet()) {
-                        if (maEntry.getKey() != null && maEntry.getValue() != null) {
-                            bodyBuilder.addFormDataPart(maEntry.getKey(), maEntry.getValue());
+                    RequestBody body;
+                    if (extras.size() == 0) {
+                        FormBody.Builder bodyBuilder = new FormBody.Builder();
+                        for (Map.Entry<String, String> maEntry : params.entrySet()) {
+                            if (maEntry.getKey() != null && maEntry.getValue() != null) {
+                                bodyBuilder.add(maEntry.getKey(), maEntry.getValue());
+                            }
                         }
+                        body = bodyBuilder.build();
+                    } else {
+                        MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+                        bodyBuilder.setType(MultipartBody.FORM);
+                        for (Map.Entry<String, String> maEntry : params.entrySet()) {
+                            if (maEntry.getKey() != null && maEntry.getValue() != null) {
+                                bodyBuilder.addFormDataPart(maEntry.getKey(), maEntry.getValue());
+                            }
+                        }
+                        for (BaseRequest.Attachment request : extras) {
+                            bodyBuilder.addFormDataPart(request.key, request.filename, request.body);
+                        }
+                        body = bodyBuilder.build();
                     }
-                    for (BaseRequest.Attachment request : extras) {
-                        bodyBuilder.addFormDataPart(request.key, request.filename, request.body);
-                    }
-                    body = bodyBuilder.build();
+                    builder.patch(body);
                 }
-                builder.patch(body);
             }
         } else if(requestEntity.method == KoalaRequestType.DELETE) {
-            if(params.size() == 0) {
-                builder.delete();
+            if(requestEntity.obj != null) {
+                builder.patch(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), KoalaGson.toJson(requestEntity.obj)));
             } else {
-                RequestBody body;
-                if(extras.size() == 0) {
-                    FormBody.Builder bodyBuilder = new FormBody.Builder();
-                    for (Map.Entry<String, String> maEntry : params.entrySet()) {
-                        if (maEntry.getKey() != null && maEntry.getValue() != null) {
-                            bodyBuilder.add(maEntry.getKey(), maEntry.getValue());
-                        }
-                    }
-                    body = bodyBuilder.build();
+                if (params.size() == 0) {
+                    builder.delete();
                 } else {
-                    MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
-                    bodyBuilder.setType(MultipartBody.FORM);
-                    for (Map.Entry<String, String> maEntry : params.entrySet()) {
-                        if (maEntry.getKey() != null && maEntry.getValue() != null) {
-                            bodyBuilder.addFormDataPart(maEntry.getKey(), maEntry.getValue());
+                    RequestBody body;
+                    if (extras.size() == 0) {
+                        FormBody.Builder bodyBuilder = new FormBody.Builder();
+                        for (Map.Entry<String, String> maEntry : params.entrySet()) {
+                            if (maEntry.getKey() != null && maEntry.getValue() != null) {
+                                bodyBuilder.add(maEntry.getKey(), maEntry.getValue());
+                            }
                         }
+                        body = bodyBuilder.build();
+                    } else {
+                        MultipartBody.Builder bodyBuilder = new MultipartBody.Builder();
+                        bodyBuilder.setType(MultipartBody.FORM);
+                        for (Map.Entry<String, String> maEntry : params.entrySet()) {
+                            if (maEntry.getKey() != null && maEntry.getValue() != null) {
+                                bodyBuilder.addFormDataPart(maEntry.getKey(), maEntry.getValue());
+                            }
+                        }
+                        for (BaseRequest.Attachment request : extras) {
+                            bodyBuilder.addFormDataPart(request.key, request.filename, request.body);
+                        }
+                        body = bodyBuilder.build();
                     }
-                    for (BaseRequest.Attachment request : extras) {
-                        bodyBuilder.addFormDataPart(request.key, request.filename, request.body);
-                    }
-                    body = bodyBuilder.build();
+                    builder.delete(body);
                 }
-                builder.delete(body);
             }
         }
         builder.tag(SecurityMD5.ToMD5(url));
