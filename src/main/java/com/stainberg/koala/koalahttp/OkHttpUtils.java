@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient;
  */
 class OkHttpUtils {
     private OkHttpClient client;
+    private OkHttpClient downloadc;
     private static OkHttpUtils instance;
 
     private OkHttpUtils() {
@@ -17,6 +18,12 @@ class OkHttpUtils {
         builder.readTimeout(NetworkConfig.HTTP_READ_TIMEOUT, TimeUnit.MILLISECONDS);
         builder.writeTimeout(NetworkConfig.HTTP_WRITE_TIMEOUT, TimeUnit.MILLISECONDS);
         client = builder.build();
+
+        OkHttpClient.Builder downloadb = new OkHttpClient.Builder();
+        downloadb.connectTimeout(NetworkConfig.DOWNLOAD_CONNECT_TIMEOUT, TimeUnit.MILLISECONDS);
+        downloadb.readTimeout(NetworkConfig.DOWNLOAD_READ_TIMEOUT, TimeUnit.MILLISECONDS);
+        downloadb.writeTimeout(NetworkConfig.DOWNLOAD_WRITE_TIMEOUT, TimeUnit.MILLISECONDS);
+        downloadc = downloadb.build();
     }
 
     static OkHttpUtils getInstance() {
@@ -32,5 +39,9 @@ class OkHttpUtils {
 
     OkHttpClient getHttpClient() {
         return client;
+    }
+
+    OkHttpClient getDownloadClient() {
+        return downloadc;
     }
 }
