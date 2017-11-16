@@ -31,12 +31,12 @@ repositories {
     mavenCentral()
 }
 
-//apply plugin: 'com.novoda.bintray-release'
-//publish {
-//    userOrg = 'donaldyen'
-//    groupId = 'com.stainberg.koala'
-//    artifactId = 'http-request'
-//    publishVersion = '0.2.2'
-//    desc = 'with okhttp:3.9.0,okio:1.13.0'
-//    website = 'https://github.com/stainberg/koala-httprequest'
-//}
+apply plugin: 'com.novoda.bintray-release'
+publish {
+    userOrg = 'donaldyen'
+    groupId = 'com.stainberg.koala'
+    artifactId = 'http-request'
+    publishVersion = '0.2.5'
+    desc = 'with okhttp:3.9.0,okio:1.13.0'
+    website = 'https://github.com/stainberg/koala-httprequest'
+}
