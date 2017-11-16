@@ -7,7 +7,7 @@ import okhttp3.OkHttpClient;
 /**
  * Created by stainberg on 6/3/15.
  */
-class OkHttpUtils {
+public class OkHttpUtils {
     private OkHttpClient client;
     private OkHttpClient downloadc;
     private static OkHttpUtils instance;
@@ -26,7 +26,7 @@ class OkHttpUtils {
         downloadc = downloadb.build();
     }
 
-    static OkHttpUtils getInstance() {
+    public static OkHttpUtils getInstance() {
         if(instance == null) {
             synchronized (OkHttpUtils.class) {
                 if(instance == null) {
@@ -41,7 +41,7 @@ class OkHttpUtils {
         return client;
     }
 
-    OkHttpClient getDownloadClient() {
+    public OkHttpClient getDownloadClient() {
         return downloadc;
     }
 }
