@@ -6,9 +6,11 @@ package com.stainberg.koala.koalahttp;
 abstract class LogicTask implements Runnable {
 
     String taskMsgId;
+    RequestLogic logic;
 
-    LogicTask(String taskMsgId) {
+    LogicTask(String taskMsgId, RequestLogic logic) {
         this.taskMsgId = taskMsgId;
+        this.logic = logic;
     }
 
     protected abstract void execute();

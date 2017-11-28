@@ -7,8 +7,6 @@ import android.text.TextUtils;
 import com.stainberg.koala.request.BaseRequest;
 import com.stainberg.koala.request.RequestConfig;
 
-import java.util.Map;
-
 import okhttp3.Response;
 
 /**
@@ -17,9 +15,9 @@ import okhttp3.Response;
 public class RequestLogic {
 
     private String id;
-    private BaseRequest request;
-    private KoalaTaskListener listener;
-    private KoalaInterrupt interrupt;
+    BaseRequest request;
+    KoalaTaskListener listener;
+    KoalaInterrupt interrupt;
     private int code = 0;
     private String resultString = "";
 
@@ -33,7 +31,7 @@ public class RequestLogic {
 
     @SuppressWarnings("unchecked")
     public <T> void execute() {
-        ExecuteHelper.getLogicHelper().execute(new LogicTask(id) {
+        ExecuteHelper.getLogicHelper().execute(new LogicTask(id, RequestLogic.this) {
             @Override
             protected void execute() {
                 if(interrupt != null) {
@@ -82,10 +80,10 @@ public class RequestLogic {
         T result;
         String responseString;
         try {
-            Logger.getLogger().Println("cURL String = ", BuildCurlString(request));
-            Logger.getLogger().Println("Request id = " + id, KoalaGson.toJson(request));
+            Logger.getLogger().PrintcUrl(request);
+            Logger.getLogger().Println("Request id = " + id, request);
             Response response = KoalaHttpLoader.getInstance().syncTask(request);
-            Logger.getLogger().Println("Response id = " + id, KoalaGson.toJson(response));
+            Logger.getLogger().Println("Response id = " + id, response);
             if (response != null) {
                 code = response.code();
                 responseString = response.body().string();
@@ -149,54 +147,4 @@ public class RequestLogic {
             return new RequestLogic(this);
         }
     }
-
-    private static String BuildCurlString(BaseRequest request) {
-        String url = request.url;
-        String wspace = " ";
-        StringBuilder builder = new StringBuilder();
-        builder.append("curl -X");
-        builder.append(wspace);
-        builder.append(request.method);
-        builder.append(wspace);
-        for (Map.Entry<String, String> entry: request.headers.entrySet()) {
-            builder.append("-H");
-            builder.append(wspace);
-            builder.append("\"");
-            builder.append(entry.getKey());
-            builder.append(":");
-            builder.append(entry.getValue());
-            builder.append("\"");
-            builder.append(wspace);
-        }
-        if(request.params.size() > 0) {
-            if(request.method == KoalaRequestType.GET) {
-                url += ("?" + KoalaHttpUtils.getNameValuePair(request.params));
-            } else {
-                builder.append("-d");
-                builder.append(wspace);
-                builder.append("'");
-                if(request.obj != null) {
-                    builder.append(KoalaGson.toJson(request.obj));
-                } else {
-                    int index = 1;
-                    for (Map.Entry<String, String> entry : request.params.entrySet()) {
-                        builder.append(entry.getKey());
-                        builder.append("=");
-                        builder.append(entry.getValue());
-                        if (index < request.params.size()) {
-                            builder.append("&");
-                        }
-                        index++;
-                    }
-                }
-                builder.append("'");
-                builder.append(wspace);
-            }
-        }
-        builder.append("\"");
-        builder.append(url);
-        builder.append("\"");
-        return builder.toString();
-    }
-
 }
