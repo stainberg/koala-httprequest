@@ -55,7 +55,7 @@ public class ExecuteHelper {
         }
     }
 
-    void removeTask(String id) {
+    public void removeTask(String id) {
         for (LogicTask task : tasks.values()) {
             if(task.taskMsgId.equals(id)) {
                 task.logic.listener = null;
