@@ -16,20 +16,20 @@ import java.util.Set;
 class KoalaHttpUtils {
 
     static String getNameValuePair(Map<String, String> params) {
-        String StrArgs = null;
+        StringBuilder StrArgs = null;
         Set<Map.Entry<String, String>> set = params.entrySet();
         for (Map.Entry<String, String> maEntry : set) {
             try {
                 if (StrArgs == null) {
-                    StrArgs = maEntry.getKey() + "=" + URLEncoder.encode(maEntry.getValue(), "UTF-8");
+                    StrArgs = new StringBuilder(maEntry.getKey() + "=" + URLEncoder.encode(maEntry.getValue(), "UTF-8"));
                 } else {
-                    StrArgs += StrArgs = "&" + maEntry.getKey() + "=" + URLEncoder.encode(maEntry.getValue(), "UTF-8");
+                    StrArgs.append(StrArgs = new StringBuilder("&" + maEntry.getKey() + "=" + URLEncoder.encode(maEntry.getValue(), "UTF-8")));
                 }
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
-        return StrArgs;
+        return StrArgs != null ? StrArgs.toString() : "";
     }
 
     static <T, K extends BaseRequest> Class parserClass(KoalaTaskListener<T, K> taskListener) {

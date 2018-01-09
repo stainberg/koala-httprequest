@@ -42,7 +42,11 @@ public class Logger {
 
     void Println(String tag, Object o) {
         if(getLogger().isdebug) {
-            Log.d(tag, KoalaGson.toJson(o));
+            try {
+                Log.d(tag, KoalaGson.toJson(o));
+            } catch (Exception e) {
+                Log.d(tag, "Println Error e = " + e.getMessage());
+            }
         }
     }
 

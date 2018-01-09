@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile 'com.squareup.okio:okio:1.13.0'
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.android.support:appcompat-v7:26.1.0'
@@ -36,7 +36,7 @@ publish {
     userOrg = 'donaldyen'
     groupId = 'com.stainberg.koala'
     artifactId = 'http-request'
-    publishVersion = '0.2.7'
-    desc = 'with okhttp:3.9.0,okio:1.13.0'
+    publishVersion = '0.2.8'
+    desc = 'with okhttp:3.9.1,okio:1.13.0'
     website = 'https://github.com/stainberg/koala-httprequest'
 }

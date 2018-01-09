@@ -83,8 +83,7 @@ public class RequestLogic {
             Logger.getLogger().PrintcUrl(request);
             Logger.getLogger().Println("Request id = " + id, request);
             Response response = KoalaHttpLoader.getInstance().syncTask(request);
-            Logger.getLogger().Println("Response id = " + id, response);
-            if (response != null) {
+            if (response != null && response.body() != null) {
                 code = response.code();
                 responseString = response.body().string();
                 resultString = responseString;
