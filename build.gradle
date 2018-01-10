@@ -36,7 +36,7 @@ publish {
     userOrg = 'donaldyen'
     groupId = 'com.stainberg.koala'
     artifactId = 'http-request'
-    publishVersion = '0.2.8'
+    publishVersion = '0.2.9'
     desc = 'with okhttp:3.9.1,okio:1.13.0'
     website = 'https://github.com/stainberg/koala-httprequest'
 }
