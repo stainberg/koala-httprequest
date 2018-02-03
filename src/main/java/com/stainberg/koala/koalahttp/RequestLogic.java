@@ -96,15 +96,18 @@ public class RequestLogic {
                             return result;
                         }
                         code = NetworkConstants.PARSER_ERROR;
+                        RequestConfig.NotifyListener(code, responseString, request);
                     }
                 } else {
                     RequestConfig.NotifyListener(code, responseString, request);
                 }
             } else {
                 code = NetworkConstants.NO_RESPONSE;
+                RequestConfig.NotifyListener(code, "NO_RESPONSE", request);
             }
         } catch (Exception e) {
             code = NetworkConstants.NETWORK_ERROR;
+            RequestConfig.NotifyListener(code, "NETWORK_ERROR", request);
         }
         return null;
     }
